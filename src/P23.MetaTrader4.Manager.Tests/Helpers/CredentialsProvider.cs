@@ -19,7 +19,7 @@ namespace P23.MetaTrader4.Manager.Tests.Helpers
                 @"D:\ProgrammingWorkspace\GitHub\MetaTrader4.Manager.Wrapper\Libraries\mtmanapi\mtmanapi.dll");
         }
 
-        private static ConnectionParameters GetCredentials()
+        public static ConnectionParameters GetCredentials()
         {
             return LazyParameters.Value;
         }
