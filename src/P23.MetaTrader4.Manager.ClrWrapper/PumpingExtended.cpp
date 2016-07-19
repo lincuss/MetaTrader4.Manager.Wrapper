@@ -5,7 +5,7 @@
 int P23::MetaTrader4::Manager::ClrWrapper::PumpingSwitchEx()
 {
 	if (_callBackHandler.IsAllocated)
-		throw gcnew MetaTrader4::Manager::Contracts::MetaTraderException("Callback handler alread allocated");
+		_callBackHandler.Free();
 	
 	_extendedPumpingCallBack = gcnew ExtendedCallBackDelegate(this, &ClrWrapper::ExtendedPumpingNotify);
 	_callBackHandler = GCHandle::Alloc(_extendedPumpingCallBack);

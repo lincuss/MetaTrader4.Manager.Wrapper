@@ -38,5 +38,66 @@ namespace P23.MetaTrader4.Manager.Tests
                 Assert.IsFalse(string.IsNullOrEmpty(groups[0].Name));
             }
         }
+
+        [TestMethod]
+        public void PumpingSwitch_SecondInvocationWillReassignCallback()
+        {
+            using (var mt = TestHelpers.CreateWrapper())
+            {
+                //Arrange
+                var autoResetEventFirstPumpingStarted = new AutoResetEvent(false);
+                var autoResetEventFirstPumpingStopped = new AutoResetEvent(false);
+                bool pumpingStartedForFirstTime = false;
+                bool pumpingStoppedForFirstTime = false;
+
+                mt.PumpingSwitch(i =>
+                {
+                    if ((PumpingNotificationCodes)i == PumpingNotificationCodes.Start)
+                    {
+                        pumpingStartedForFirstTime = true;
+                        autoResetEventFirstPumpingStarted.Set();
+                    }
+                    if ((PumpingNotificationCodes)i == PumpingNotificationCodes.Stop)
+                    {
+                        pumpingStoppedForFirstTime = true;
+                        autoResetEventFirstPumpingStopped.Set();
+                    }
+                });
+
+                autoResetEventFirstPumpingStarted.WaitOne(new TimeSpan(0, 0, 10));
+                Assert.IsTrue(pumpingStartedForFirstTime, "Pumping was not started for first time");
+
+                //Act
+                var usersRequestResult = mt.UsersRequest();
+                Assert.AreEqual(0, usersRequestResult.Count);
+
+
+                autoResetEventFirstPumpingStopped.WaitOne(new TimeSpan(0, 0, 10));
+                Assert.IsTrue(pumpingStoppedForFirstTime, "Pumping was not stopped for first time");
+
+                var autoResetEventSecondPumpingStarted = new AutoResetEvent(false);
+                bool pumpingStartedForSecondTime = false;
+
+                var credentials = TestHelpers.GetCredentials();
+                mt.Connect(credentials.Server);
+                mt.Login(credentials.Login, credentials.Password);
+
+                var pumpingSwitchResult = mt.PumpingSwitch(i =>
+                {
+                    if ((PumpingNotificationCodes)i == PumpingNotificationCodes.Start)
+                    {
+                        pumpingStartedForSecondTime = true;
+                        autoResetEventSecondPumpingStarted.Set();
+                    }
+                });
+                
+                Assert.AreEqual(0, pumpingSwitchResult);
+
+                autoResetEventSecondPumpingStarted.WaitOne(new TimeSpan(0, 0, 10));
+                Assert.IsTrue(pumpingStartedForSecondTime, "Pumping was not started for second time");
+                var usersGetResult = mt.UsersGet();
+                Assert.IsTrue(usersGetResult.Count > 0);
+            }
+        }
     }
 }
