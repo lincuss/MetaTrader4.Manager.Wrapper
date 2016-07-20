@@ -26,7 +26,7 @@ namespace P23.MetaTrader4.Manager.Tests.Examples
                 {
                     mt.SymbolAdd(symbol.Name);
                 }
-                mt.PumpingSwitchEx();
+                mt.PumpingSwitchEx((int)PumpingModeFlags.NoFlags);
                 
                 mt.BidAskUpdated += (sender, args) =>
                 {

@@ -1273,7 +1273,7 @@ namespace P23 {
 				/// <summary>
 				/// Switch into extended pumping mode
 				/// </summary>
-				int PumpingSwitchEx();
+				int PumpingSwitchEx(int pumpingFlags);
 
 				/// <summary>
 				/// Internal use

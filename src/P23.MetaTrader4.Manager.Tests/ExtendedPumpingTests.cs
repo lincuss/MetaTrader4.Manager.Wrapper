@@ -3,6 +3,7 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using P23.MetaTrader4.Manager.Contracts.Configuration;
 using P23.MetaTrader4.Manager.Tests.Helpers;
+using P23.MetaTrader4.Manager.Contracts;
 
 namespace P23.MetaTrader4.Manager.Tests
 {
@@ -50,7 +51,7 @@ namespace P23.MetaTrader4.Manager.Tests
                 };
                 
                 //Act
-                mt.PumpingSwitchEx();
+                mt.PumpingSwitchEx((int)PumpingModeFlags.NoFlags);
 
                 //Assert
                 autoResetEvent.WaitOne(new TimeSpan(0, 0, 10));
