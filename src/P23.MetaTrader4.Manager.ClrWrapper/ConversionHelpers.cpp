@@ -1357,6 +1357,7 @@ P23::MetaTrader4::Manager::Contracts::UserRecord^  P23::MetaTrader4::Manager::Cl
 	output->Taxes = input->taxes;
 	output->UserColor = input->user_color;
 	output->ZipCode = gcnew String(input->zipcode);
+	output->ApiData = gcnew String(input->api_data);
 
 	return output;
 }
@@ -1463,6 +1464,10 @@ UserRecord*  P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::Ma
 	if (zipcode != NULL)
 		COPY_STR(output->zipcode, zipcode);
 
+	char* apiData = Convert(input->ApiData);
+	if (apiData != NULL)
+		COPY_STR(output->api_data, apiData);
+
 	return output;
 }
 
@@ -1524,8 +1529,12 @@ TradeRecord*  P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::M
 	output->commission = input->Commission;
 	output->commission_agent = input->CommissionAgent;
 
-	output->conv_rates[0] = input->CommissionAgent;
-	output->conv_rates[1] = input->CommissionAgent;
+	if (input->ConvRates->Count != 2) {
+		throw gcnew ArgumentException("Number of ConvRates should be equal to 2", "input.ConvRates");
+	}
+
+	output->conv_rates[0] = input->ConvRates[0];;
+	output->conv_rates[1] = input->ConvRates[1];;
 
 	output->digits = input->Digits;
 	output->expiration = input->Expiration;
