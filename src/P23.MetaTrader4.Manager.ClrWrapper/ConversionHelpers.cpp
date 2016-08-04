@@ -1510,6 +1510,11 @@ P23::MetaTrader4::Manager::Contracts::TradeRecord^  P23::MetaTrader4::Manager::C
 	output->Tp = input->tp;
 	output->Volume = input->volume;
 
+	output->ApiData = gcnew List<int>();
+	for (int i = 0; i < 4; i++) {
+		output->ApiData->Add(input->api_data[i]);
+	}
+
 	return output;
 }
 
@@ -1562,6 +1567,14 @@ TradeRecord*  P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::M
 	output->timestamp = input->Timestamp;
 	output->tp = input->Tp;
 	output->volume = input->Volume;
+
+	if (input->ApiData->Count != 4) {
+		throw gcnew ArgumentException("Number of ApiData should be equal to 4", "input.ApiData");
+	}
+
+	for (int i = 0; i < 4; i++) {
+		output->api_data[i] = input->ApiData[i];
+	}
 
 	return output;
 }
