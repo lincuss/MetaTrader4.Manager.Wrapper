@@ -67,7 +67,7 @@ int P23::MetaTrader4::Manager::ClrWrapper::AdmTradesDelete(IList<int>^ orders)
 
 	delete[] l;
 
-	return result
+	return result;
 }
 
 int P23::MetaTrader4::Manager::ClrWrapper::AdmTradeRecordModify(P23::MetaTrader4::Manager::Contracts::TradeRecord^ trade)
@@ -78,7 +78,7 @@ int P23::MetaTrader4::Manager::ClrWrapper::AdmTradeRecordModify(P23::MetaTrader4
 
 	delete tradeRecord;
 
-	return result
+	return result;
 }
 
 IList<P23::MetaTrader4::Manager::Contracts::BalanceDiff^>^ P23::MetaTrader4::Manager::ClrWrapper::AdmBalanceCheck(IList<int>^ logins)

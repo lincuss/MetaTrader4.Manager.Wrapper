@@ -13,5 +13,5 @@ int P23::MetaTrader4::Manager::ClrWrapper::LicenseCheck(System::String^ licenseN
 
 	Marshal::FreeHGlobal(IntPtr(ln));
 	
-	return;
+	return result;
 }

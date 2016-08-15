@@ -83,7 +83,7 @@ int P23::MetaTrader4::Manager::ClrWrapper::BackupRestoreUsers(IList<P23::MetaTra
 	
 	delete[] u;
 
-	return result
+	return result;
 }
 
 IList<P23::MetaTrader4::Manager::Contracts::TradeRestoreResult^>^ P23::MetaTrader4::Manager::ClrWrapper::BackupRestoreOrders(IList<P23::MetaTrader4::Manager::Contracts::TradeRecord^>^ trades)
