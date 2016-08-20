@@ -123,6 +123,8 @@ Common^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConCommon* configuration)
 	newConfiguration->Adapters = gcnew String(configuration->adapters);
 	newConfiguration->Address = configuration->address;
 	newConfiguration->AntiFlood = configuration->antiflood;
+
+	newConfiguration->BindAdresses = gcnew System::Collections::Generic::List<unsigned int>();
 	for (int i = 0; i < 8; i++)
 		newConfiguration->BindAdresses->Add(configuration->bind_adresses[i]);
 
@@ -168,6 +170,7 @@ Common^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConCommon* configuration)
 	newConfiguration->TimeZone = configuration->timezone;
 	newConfiguration->TypeOfDemo = (Enums::DemoAccountsType)configuration->typeofdemo;
 
+	newConfiguration->WebAdresses = gcnew System::Collections::Generic::List<unsigned int>();
 	for (int i = 0; i < 8; i++)
 		newConfiguration->WebAdresses->Add(configuration->web_adresses[i]);
 			
