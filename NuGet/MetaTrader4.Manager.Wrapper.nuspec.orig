@@ -3,7 +3,11 @@
   <metadata>
     <id>MetaTrader4.Manager.Wrapper</id>
     <title>MetaTrader4.Manager.Wrapper</title>
+<<<<<<< HEAD
     <version>0.3.6076.30273</version>
+=======
+    <version>0.3.6062.25207</version>
+>>>>>>> develop
     <authors>Uriil</authors>
     <projectUrl>https://github.com/Uriil/MetaTrader4.Manager.Wrapper</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
