@@ -212,7 +212,10 @@ P23::MetaTrader4::Manager::Contracts::MarginLevel^ P23::MetaTrader4::Manager::Cl
 	char* g = Convert(group);
 	int result = _manager->Manager->MarginLevelGet(login, g, &level);
 
-	if (result != RET_OK)
+	if (result == RET_ERROR) {
+		return nullptr;
+	}
+	else if (result != RET_OK)
 	{
 		P23::MetaTrader4::Manager::Contracts::MetaTraderException^ e = gcnew P23::MetaTrader4::Manager::Contracts::MetaTraderException();
 		e->ErrorCode = result;
