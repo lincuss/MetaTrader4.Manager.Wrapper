@@ -1233,7 +1233,7 @@ namespace P23 {
 				/// </summary>
 				/// <param name="symbol">symbol</param>
 				/// <param name="updated">updated</param>
-				int HistoryCorrect(String^ symbol, int updated);
+				int HistoryCorrect(String^ symbol);
 
 				//--- new chart bases
 				/// <summary>
