@@ -208,9 +208,9 @@ IList<P23::MetaTrader4::Manager::Contracts::MarginLevel^>^ P23::MetaTrader4::Man
 
 P23::MetaTrader4::Manager::Contracts::MarginLevel^ P23::MetaTrader4::Manager::ClrWrapper::MarginLevelGet(int login, String^ group)
 {
-	MarginLevel level;
-	char* g = Convert(group);
-	int result = _manager->Manager->MarginLevelGet(login, g, &level);
+	P23::MetaTrader4::Manager::Contracts::MarginLevel^ marginLevel;
+	
+	int result = MarginLevelGet(login, group, marginLevel);
 
 	if (result == RET_ERROR) {
 		return nullptr;
@@ -222,10 +222,24 @@ P23::MetaTrader4::Manager::Contracts::MarginLevel^ P23::MetaTrader4::Manager::Cl
 		throw e;
 	}
 
-	Marshal::FreeHGlobal(IntPtr(g));
-
-	return Convert(&level);
+	return marginLevel;
 }
+
+int P23::MetaTrader4::Manager::ClrWrapper::MarginLevelGet(int login, String^ group, [System::Runtime::InteropServices::Out] P23::MetaTrader4::Manager::Contracts::MarginLevel^% marginLevel)
+{
+	MarginLevel level;
+	char* g = Convert(group);
+	int result = _manager->Manager->MarginLevelGet(login, g, &level);
+	Marshal::FreeHGlobal(IntPtr(g));
+	marginLevel = Convert(&level);
+
+	return result;
+}
+
+//int P23::MetaTrader4::Manager::ClrWrapper::MarginLevelGet(int login, String ^ group, P23::MetaTrader4::Manager::Contracts::MarginLevel^% marginLevel)
+//{
+//	return 0;
+//}
 
 IList<P23::MetaTrader4::Manager::Contracts::RequestInfo^>^ P23::MetaTrader4::Manager::ClrWrapper::RequestsGet()
 {

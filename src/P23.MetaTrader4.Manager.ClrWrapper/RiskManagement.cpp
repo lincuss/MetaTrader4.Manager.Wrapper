@@ -110,11 +110,9 @@ P23::MetaTrader4::Manager::Contracts::MarginLevel^ P23::MetaTrader4::Manager::Cl
 int P23::MetaTrader4::Manager::ClrWrapper::HistoryCorrect(String^ symbol)
 {
 	int updated;
-	char* s = Convert(symbol);
-
-	int result = _manager->Manager->HistoryCorrect(s, &updated);
-	Marshal::FreeHGlobal(IntPtr(s));
-
+	
+	int result = HistoryCorrect(symbol, updated);
+	
 	if (result != RET_OK)
 	{
 		P23::MetaTrader4::Manager::Contracts::MetaTraderException^ e = gcnew P23::MetaTrader4::Manager::Contracts::MetaTraderException();
@@ -123,4 +121,17 @@ int P23::MetaTrader4::Manager::ClrWrapper::HistoryCorrect(String^ symbol)
 	}
 
 	return updated;
+}
+
+int P23::MetaTrader4::Manager::ClrWrapper::HistoryCorrect(String^ symbol, [System::Runtime::InteropServices::Out] int% updated) 
+{
+	int updatedCount;
+
+	char* s = Convert(symbol);
+
+	int result = _manager->Manager->HistoryCorrect(s, &updatedCount);
+	Marshal::FreeHGlobal(IntPtr(s));
+	updated = updatedCount;
+
+	return result;
 }
