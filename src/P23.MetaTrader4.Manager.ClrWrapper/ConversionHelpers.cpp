@@ -533,7 +533,7 @@ ConHoliday* P23::MetaTrader4::Manager::ClrWrapper::Convert(Holiday^ configuratio
 Symbol^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConSymbol* configuration)
 {
 	Symbol^ newConfiguration = gcnew Symbol();
-	newConfiguration->Sessions = gcnew List<Sessions^>();
+	newConfiguration->Sessions = gcnew List<Sessions^>(7);
 
 	newConfiguration->AskTickValue = configuration->ask_tickvalue;
 	newConfiguration->BackgroundColor = configuration->background_color;
@@ -684,8 +684,8 @@ ConSymbol* P23::MetaTrader4::Manager::ClrWrapper::Convert(Symbol^ configuration)
 Sessions^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConSessions* configuration)
 {
 	Sessions^ newConfiguration = gcnew Sessions();
-	newConfiguration->Quote = gcnew List<Session^>();
-	newConfiguration->Trade = gcnew List<Session^>();
+	newConfiguration->Quote = gcnew List<Session^>(3);
+	newConfiguration->Trade = gcnew List<Session^>(3);
 		
 	for (int i = 0; i < 3; i++)
 		newConfiguration->Quote->Insert(i, Convert(&configuration->quote[i]));;
@@ -1561,7 +1561,7 @@ P23::MetaTrader4::Manager::Contracts::TradeRecord^  P23::MetaTrader4::Manager::C
 	output->Commission = input->commission;
 	output->CommissionAgent = input->commission_agent;
 	
-	output->ConvRates = gcnew List<double>();
+	output->ConvRates = gcnew List<double>(2);
 	output->ConvRates->Add(input->conv_rates[0]);
 	output->ConvRates->Add(input->conv_rates[1]);
 
@@ -1588,7 +1588,7 @@ P23::MetaTrader4::Manager::Contracts::TradeRecord^  P23::MetaTrader4::Manager::C
 	output->Tp = input->tp;
 	output->Volume = input->volume;
 
-	output->ApiData = gcnew List<int>();
+	output->ApiData = gcnew List<int>(4);
 	for (int i = 0; i < 4; i++) {
 		output->ApiData->Add(input->api_data[i]);
 	}
@@ -1799,7 +1799,7 @@ P23::MetaTrader4::Manager::Contracts::NewsTopicNew^ P23::MetaTrader4::Manager::C
 	output->Key = input->key;
 	output->Language = input->language;
 	
-	output->LanguagesList = gcnew List<unsigned int>();
+	output->LanguagesList = gcnew List<unsigned int>(32);
 	for (int i = 0; i < 32; i++)
 		output->LanguagesList->Add(input->languages_list[i]);
 
@@ -1973,7 +1973,7 @@ P23::MetaTrader4::Manager::Contracts::RequestInfo^ P23::MetaTrader4::Manager::Cl
 	output->Id = input->id;
 	output->Manager = input->manager;
 	
-	output->Prices = gcnew List<double>();
+	output->Prices = gcnew List<double>(2);
 	output->Prices->Add(input->prices[0]);
 	output->Prices->Add(input->prices[1]);
 	
@@ -2170,7 +2170,7 @@ SymbolProperties* P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader
 P23::MetaTrader4::Manager::Contracts::Configuration::GatewayAccount^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConGatewayAccount* input)
 {
 	P23::MetaTrader4::Manager::Contracts::Configuration::GatewayAccount^ output = gcnew P23::MetaTrader4::Manager::Contracts::Configuration::GatewayAccount();
-	output->NotifyLogins = gcnew List<int>();
+	output->NotifyLogins = gcnew List<int>(8);
 
 	output->Address = gcnew String(input->address);
 	output->Enable = input->enable;
