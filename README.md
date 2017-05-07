@@ -1,9 +1,11 @@
+**NOTE:** please use Issues tab only to report bugs or request features. In case of any other questions please use [StackOverflow](https://stackoverflow.com/) and tag [metatrader4](http://stackoverflow.com/questions/tagged/metatrader4).
+
 MetaTrader4.Manager.Wrapper
 ===========================
 
 .NET Wrapper around native mtmanager.dll, for MetaTrader 4 manager API.
 
-##Installation
+## Installation
 
 To use these providers you will need to install the `MetaTrader4.Manager.Wrapper` NuGet package:
 
@@ -11,7 +13,7 @@ To use these providers you will need to install the `MetaTrader4.Manager.Wrapper
 Install-Package MetaTrader4.Manager.Wrapper
 ```
 
-##Using wrapper in Request mode
+## Using wrapper in Request mode
 
 Data can be accessed using `*Request` methods.
 
@@ -27,7 +29,7 @@ Data can be accessed using `*Request` methods.
 	}
 ```
 
-##Using wrapper in Pumping mode
+## Using wrapper in Pumping mode
 
 Pumping mode allows to get notifications about changes regarding users, trades and etc. Data can be accessed using `*Get` methods.
 
@@ -52,7 +54,7 @@ Pumping mode allows to get notifications about changes regarding users, trades a
 	}
 ```
 
-##Using wrapper in Extended Pumping mode
+## Using wrapper in Extended Pumping mode
 
 In Extended Pumping mode notification comes together with new data, so there is no need to call `*Get` method.
 
