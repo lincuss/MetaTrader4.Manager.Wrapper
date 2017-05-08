@@ -2,12 +2,15 @@
 #include "P23.MetaTrader4.Manager.ClrWrapper.h"
 
 #define DAYS_IN_ONE_WEEK 7
+#define HOURS_IN_ONE_DAY 24
 #define CONVERSION_RATES_COUNT 2
 #define SESSION_TIMERANGE_COUNT 3
 #define NEWS_TOPIC_LANGUAGE_LIST_COUNT 32
 #define REQUEST_INFO_PRICES_COUNT 2
 #define GATEWAY_ACCOUNT_NOTIFY_LOGINS_COUNT 8
 #define TRADE_RECORD_API_DATA_COUNT 4
+#define COMMON_BIND_ADDRESSES_COUNT 8
+#define COMMON_WEB_ADDRESSES_COUNT 8
 
 #define COPY_STR(dst,src)  { strncpy_s(dst,src,sizeof(dst)-1); dst[sizeof(dst)-1]=0; }
 
@@ -37,7 +40,7 @@ P23::MetaTrader4::Manager::Contracts::Configuration::Manager^ P23::MetaTrader4::
 	tManager->Reports = configuration->reports;
 	tManager->Riskman = configuration->riskman;
 
-	tManager->SecGroups = gcnew System::Collections::Generic::List<P23::MetaTrader4::Manager::Contracts::Configuration::ManagerSecurity^>();
+	tManager->SecGroups = gcnew List<P23::MetaTrader4::Manager::Contracts::Configuration::ManagerSecurity^>(MAX_SEC_GROUPS);
 	for (int i = 0; i < MAX_SEC_GROUPS; i++){
 		tManager->SecGroups->Add(Convert(&configuration->secgroups[i]));
 	}
@@ -131,8 +134,8 @@ Common^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConCommon* configuration)
 	newConfiguration->Address = configuration->address;
 	newConfiguration->AntiFlood = configuration->antiflood;
 
-	newConfiguration->BindAdresses = gcnew System::Collections::Generic::List<unsigned int>();
-	for (int i = 0; i < 8; i++)
+	newConfiguration->BindAdresses = gcnew List<unsigned int>(COMMON_BIND_ADDRESSES_COUNT);
+	for (int i = 0; i < COMMON_BIND_ADDRESSES_COUNT; i++)
 		newConfiguration->BindAdresses->Add(configuration->bind_adresses[i]);
 
 	newConfiguration->DayLightCorrection = configuration->daylightcorrection;
@@ -177,8 +180,8 @@ Common^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConCommon* configuration)
 	newConfiguration->TimeZone = configuration->timezone;
 	newConfiguration->TypeOfDemo = (Enums::DemoAccountsType)configuration->typeofdemo;
 
-	newConfiguration->WebAdresses = gcnew System::Collections::Generic::List<unsigned int>();
-	for (int i = 0; i < 8; i++)
+	newConfiguration->WebAdresses = gcnew List<unsigned int>(COMMON_WEB_ADDRESSES_COUNT);
+	for (int i = 0; i < COMMON_WEB_ADDRESSES_COUNT; i++)
 		newConfiguration->WebAdresses->Add(configuration->web_adresses[i]);
 			
 	return newConfiguration;
@@ -201,7 +204,7 @@ ConCommon* P23::MetaTrader4::Manager::ClrWrapper::Convert(Common^ configuration)
 	newConfiguration->address = configuration->Address;
 	newConfiguration->antiflood = configuration->AntiFlood;
 
-	if (configuration->BindAdresses->Count > 8)
+	if (configuration->BindAdresses->Count > COMMON_BIND_ADDRESSES_COUNT)
 		throw gcnew ArgumentException("BindAddresses count exceed 8");
 	for (int i = 0; i < configuration->BindAdresses->Count; i++)
 		newConfiguration->bind_adresses[i] = configuration->BindAdresses[i];
@@ -275,7 +278,7 @@ ConCommon* P23::MetaTrader4::Manager::ClrWrapper::Convert(Common^ configuration)
 	newConfiguration->timezone = configuration->TimeZone;
 	newConfiguration->typeofdemo = (int)configuration->TypeOfDemo;
 
-	if (configuration->WebAdresses->Count > 8)
+	if (configuration->WebAdresses->Count > COMMON_WEB_ADDRESSES_COUNT)
 		throw gcnew ArgumentException("WebAdresses count exceed 8");
 	for (int i = 0; i < configuration->WebAdresses->Count; i++)
 		newConfiguration->web_adresses[i] = configuration->WebAdresses[i];
@@ -286,10 +289,10 @@ ConCommon* P23::MetaTrader4::Manager::ClrWrapper::Convert(Common^ configuration)
 Time^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConTime* configuration)
 {
 	Time^ newConfiguration = gcnew Time();
-	newConfiguration->Days = gcnew System::Collections::Generic::List<System::Collections::Generic::IList<int>^>();
-	for (int day = 0; day < 7; day++) {
-		System::Collections::Generic::IList<int>^ dayValues = gcnew System::Collections::Generic::List<int>();
-		for (int hour = 0; hour < 24; hour++)
+	newConfiguration->Days = gcnew List<IList<int>^>(DAYS_IN_ONE_WEEK);
+	for (int day = 0; day < DAYS_IN_ONE_WEEK; day++) {
+		IList<int>^ dayValues = gcnew List<int>(HOURS_IN_ONE_DAY);
+		for (int hour = 0; hour < HOURS_IN_ONE_DAY; hour++)
 			dayValues->Add(configuration->days[day][hour]);
 		newConfiguration->Days->Add(dayValues);
 	}
@@ -300,12 +303,12 @@ Time^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConTime* configuration)
 ConTime* P23::MetaTrader4::Manager::ClrWrapper::Convert(Time^ configuration)
 {
 	ConTime* newConfiguration = new ConTime();
-	if (configuration->Days->Count != 7)
+	if (configuration->Days->Count != DAYS_IN_ONE_WEEK)
 		throw gcnew ArgumentException("Invalid number of days");
-	for (int day = 0; day < 7; day++){
-		if (configuration->Days[day]->Count != 24)
+	for (int day = 0; day < DAYS_IN_ONE_WEEK; day++){
+		if (configuration->Days[day]->Count != HOURS_IN_ONE_DAY)
 			throw gcnew ArgumentException("Invalid number of hours");
-		for (int hour = 0; hour < 24; hour++)
+		for (int hour = 0; hour < HOURS_IN_ONE_DAY; hour++)
 		{
 			System::Collections::Generic::IList<int>^ intraDayValues = configuration->Days[day];
 			newConfiguration->days[day][hour] = intraDayValues[hour];
@@ -775,18 +778,18 @@ Group^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConGroup* configuration)
 	newConfiguration->Name = gcnew String(configuration->group);
 	newConfiguration->News = (Enums::NewsMode)configuration->news;
 
-	newConfiguration->NewsLanguages = gcnew System::Collections::Generic::List<unsigned int>();
+	newConfiguration->NewsLanguages = gcnew List<unsigned int>(configuration->news_languages_total);
 	for (int i = 0; i < (int)configuration->news_languages_total; i++)
 		newConfiguration->NewsLanguages->Add(configuration->news_languages[i]);
 
 	newConfiguration->Reports = configuration->reports;
 	newConfiguration->Rights = (Enums::GroupRights)configuration->rights;
 
-	newConfiguration->SecGroups = gcnew System::Collections::Generic::List<GroupSecurity^>();
+	newConfiguration->SecGroups = gcnew List<GroupSecurity^>(MAX_SEC_GROUPS);
 	for (int i = 0; i < MAX_SEC_GROUPS; i++)
 		newConfiguration->SecGroups->Add(Convert(&configuration->secgroups[i]));
 
-	newConfiguration->SecMargins = gcnew System::Collections::Generic::List<GroupMargin^>();
+	newConfiguration->SecMargins = gcnew List<GroupMargin^>(MAX_SEC_GROPS_MARGIN);
 	for (int i = 0; i < MAX_SEC_GROPS_MARGIN; i++)
 		newConfiguration->SecMargins->Add(Convert(&configuration->secmargins[i]));
 	
@@ -1077,7 +1080,7 @@ LiveUpdate^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConLiveUpdate* config
 	newConfiguration->Connections = configuration->connections;
 	newConfiguration->Enable = configuration->enable;
 
-	newConfiguration->Files = gcnew System::Collections::Generic::List<FilesConfigurations^>();
+	newConfiguration->Files = gcnew List<FilesConfigurations^>(configuration->totalfiles);
 	for (int i = 0; i < configuration->totalfiles; i++)
 		newConfiguration->Files->Add(Convert(&configuration->files[i]));
 
@@ -1206,7 +1209,7 @@ PluginWithParameters^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConPluginPa
 {
 	PluginWithParameters^ newConfiguration = gcnew PluginWithParameters();
 		
-	newConfiguration->Parameters = gcnew System::Collections::Generic::List<PluginConfigurationParameter^>();
+	newConfiguration->Parameters = gcnew List<PluginConfigurationParameter^>(configuration->total);
 	for (int i = 0; i < configuration->total; i++)
 		newConfiguration->Parameters->Add(Convert(&UnmanagedHelpers::GetPluginParameters(configuration, i)));
 	
