@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "P23.MetaTrader4.Manager.ClrWrapper.h"
 
+#define DAYS_IN_ONE_WEEK 7
+#define CONVERSION_RATES_COUNT 2
+#define SESSION_TIMERANGE_COUNT 3
+#define NEWS_TOPIC_LANGUAGE_LIST_COUNT 32
+#define REQUEST_INFO_PRICES_COUNT 2
+#define GATEWAY_ACCOUNT_NOTIFY_LOGINS_COUNT 8
+#define TRADE_RECORD_API_DATA_COUNT 4
 
 #define COPY_STR(dst,src)  { strncpy_s(dst,src,sizeof(dst)-1); dst[sizeof(dst)-1]=0; }
 
@@ -533,7 +540,7 @@ ConHoliday* P23::MetaTrader4::Manager::ClrWrapper::Convert(Holiday^ configuratio
 Symbol^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConSymbol* configuration)
 {
 	Symbol^ newConfiguration = gcnew Symbol();
-	newConfiguration->Sessions = gcnew List<Sessions^>(7);
+	newConfiguration->Sessions = gcnew List<Sessions^>(DAYS_IN_ONE_WEEK);
 
 	newConfiguration->AskTickValue = configuration->ask_tickvalue;
 	newConfiguration->BackgroundColor = configuration->background_color;
@@ -569,7 +576,7 @@ Symbol^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConSymbol* configuration)
 	newConfiguration->QuotesDelay = configuration->quotes_delay;
 	newConfiguration->RealTime = configuration->realtime;
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < DAYS_IN_ONE_WEEK; i++)
 		newConfiguration->Sessions->Insert(i, Convert(&configuration->sessions[i]));
 
 	newConfiguration->Source = gcnew String(configuration->source);
@@ -595,7 +602,7 @@ Symbol^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConSymbol* configuration)
 
 ConSymbol* P23::MetaTrader4::Manager::ClrWrapper::Convert(Symbol^ configuration)
 {
-	if (configuration->Sessions->Count != 7)
+	if (configuration->Sessions->Count != DAYS_IN_ONE_WEEK)
 		throw gcnew ArgumentException("Number sessions must be equal 7");
 
 	ConSymbol* newConfiguration = new ConSymbol();
@@ -653,7 +660,7 @@ ConSymbol* P23::MetaTrader4::Manager::ClrWrapper::Convert(Symbol^ configuration)
 	newConfiguration->quotes_delay = configuration->QuotesDelay;
 	newConfiguration->realtime = configuration->RealTime;
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < DAYS_IN_ONE_WEEK; i++)
 		newConfiguration->sessions[i] = *Convert(configuration->Sessions[i]);
 		
 	char* source = Convert(configuration->Source);
@@ -684,13 +691,13 @@ ConSymbol* P23::MetaTrader4::Manager::ClrWrapper::Convert(Symbol^ configuration)
 Sessions^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConSessions* configuration)
 {
 	Sessions^ newConfiguration = gcnew Sessions();
-	newConfiguration->Quote = gcnew List<Session^>(3);
-	newConfiguration->Trade = gcnew List<Session^>(3);
+	newConfiguration->Quote = gcnew List<Session^>(SESSION_TIMERANGE_COUNT);
+	newConfiguration->Trade = gcnew List<Session^>(SESSION_TIMERANGE_COUNT);
 		
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < SESSION_TIMERANGE_COUNT; i++)
 		newConfiguration->Quote->Insert(i, Convert(&configuration->quote[i]));;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < SESSION_TIMERANGE_COUNT; i++)
 		newConfiguration->Trade->Insert(i, Convert(&configuration->trade[i]));
 
 	return newConfiguration;
@@ -700,9 +707,9 @@ ConSessions* P23::MetaTrader4::Manager::ClrWrapper::Convert(Sessions^ configurat
 {
 	ConSessions* newConfiguration = new ConSessions();
 
-	if (configuration->Quote->Count > 3)
+	if (configuration->Quote->Count > SESSION_TIMERANGE_COUNT)
 		throw gcnew ArgumentException("Number quote sessions exceeded 3");
-	if (configuration->Trade->Count > 3)
+	if (configuration->Trade->Count > SESSION_TIMERANGE_COUNT)
 		throw gcnew ArgumentException("Number trade sessions exceeded 3");
 
 	for (int i = 0; i < configuration->Quote->Count; i++)
@@ -1561,7 +1568,7 @@ P23::MetaTrader4::Manager::Contracts::TradeRecord^  P23::MetaTrader4::Manager::C
 	output->Commission = input->commission;
 	output->CommissionAgent = input->commission_agent;
 	
-	output->ConvRates = gcnew List<double>(2);
+	output->ConvRates = gcnew List<double>(CONVERSION_RATES_COUNT);
 	output->ConvRates->Add(input->conv_rates[0]);
 	output->ConvRates->Add(input->conv_rates[1]);
 
@@ -1588,8 +1595,8 @@ P23::MetaTrader4::Manager::Contracts::TradeRecord^  P23::MetaTrader4::Manager::C
 	output->Tp = input->tp;
 	output->Volume = input->volume;
 
-	output->ApiData = gcnew List<int>(4);
-	for (int i = 0; i < 4; i++) {
+	output->ApiData = gcnew List<int>(TRADE_RECORD_API_DATA_COUNT);
+	for (int i = 0; i < TRADE_RECORD_API_DATA_COUNT; i++) {
 		output->ApiData->Add(input->api_data[i]);
 	}
 
@@ -1613,7 +1620,7 @@ TradeRecord*  P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::M
 	output->commission = input->Commission;
 	output->commission_agent = input->CommissionAgent;
 
-	if (input->ConvRates->Count != 2) {
+	if (input->ConvRates->Count != CONVERSION_RATES_COUNT) {
 		throw gcnew ArgumentException("Number of ConvRates should be equal to 2", "input.ConvRates");
 	}
 
@@ -1648,11 +1655,11 @@ TradeRecord*  P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::M
 	output->tp = input->Tp;
 	output->volume = input->Volume;
 
-	if (input->ApiData->Count != 4) {
+	if (input->ApiData->Count != TRADE_RECORD_API_DATA_COUNT) {
 		throw gcnew ArgumentException("Number of ApiData should be equal to 4", "input.ApiData");
 	}
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < TRADE_RECORD_API_DATA_COUNT; i++) {
 		output->api_data[i] = input->ApiData[i];
 	}
 
@@ -1799,8 +1806,8 @@ P23::MetaTrader4::Manager::Contracts::NewsTopicNew^ P23::MetaTrader4::Manager::C
 	output->Key = input->key;
 	output->Language = input->language;
 	
-	output->LanguagesList = gcnew List<unsigned int>(32);
-	for (int i = 0; i < 32; i++)
+	output->LanguagesList = gcnew List<unsigned int>(NEWS_TOPIC_LANGUAGE_LIST_COUNT);
+	for (int i = 0; i < NEWS_TOPIC_LANGUAGE_LIST_COUNT; i++)
 		output->LanguagesList->Add(input->languages_list[i]);
 
 	output->Subject = gcnew String(input->subject);
@@ -1973,7 +1980,7 @@ P23::MetaTrader4::Manager::Contracts::RequestInfo^ P23::MetaTrader4::Manager::Cl
 	output->Id = input->id;
 	output->Manager = input->manager;
 	
-	output->Prices = gcnew List<double>(2);
+	output->Prices = gcnew List<double>(REQUEST_INFO_PRICES_COUNT);
 	output->Prices->Add(input->prices[0]);
 	output->Prices->Add(input->prices[1]);
 	
@@ -2002,7 +2009,7 @@ RequestInfo* P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::Ma
 	output->id = input->Id;
 	output->manager = input->Manager;
 
-	if (input->Prices->Count != 2)
+	if (input->Prices->Count != REQUEST_INFO_PRICES_COUNT)
 		throw gcnew ArgumentException("Price must have exactly two values", "Prices");
 
 	output->prices[0] = input->Prices[0];
@@ -2170,7 +2177,7 @@ SymbolProperties* P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader
 P23::MetaTrader4::Manager::Contracts::Configuration::GatewayAccount^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConGatewayAccount* input)
 {
 	P23::MetaTrader4::Manager::Contracts::Configuration::GatewayAccount^ output = gcnew P23::MetaTrader4::Manager::Contracts::Configuration::GatewayAccount();
-	output->NotifyLogins = gcnew List<int>(8);
+	output->NotifyLogins = gcnew List<int>(GATEWAY_ACCOUNT_NOTIFY_LOGINS_COUNT);
 
 	output->Address = gcnew String(input->address);
 	output->Enable = input->enable;
@@ -2179,7 +2186,7 @@ P23::MetaTrader4::Manager::Contracts::Configuration::GatewayAccount^ P23::MetaTr
 	output->Login = input->login;
 	output->Name = gcnew String(input->name);
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < GATEWAY_ACCOUNT_NOTIFY_LOGINS_COUNT; i++)
 		output->NotifyLogins->Add(input->notify_logins[i]);
 
 	output->Password = gcnew String(input->password);
@@ -2193,7 +2200,7 @@ ConGatewayAccount* P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrade
 	if (input->NotifyLogins == nullptr)
 		throw gcnew ArgumentNullException("NotifyLogins");
 
-	if (input->NotifyLogins->Count > 0)
+	if (input->NotifyLogins->Count > GATEWAY_ACCOUNT_NOTIFY_LOGINS_COUNT)
 		throw gcnew ArgumentException("Maximum allowed number of NotifyLogins: 8");
 
 	ConGatewayAccount* output = new ConGatewayAccount();
