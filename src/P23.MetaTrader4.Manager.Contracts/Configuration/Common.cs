@@ -49,10 +49,10 @@ namespace P23.MetaTrader4.Manager.Contracts.Configuration
         /// </summary>
         public int DayLightCorrection { get; set; }
 
-		/// <summary>
-		/// Time zone with day light mode
-		/// </summary>
-		public int TimeZoneReal { get; set; }
+        /// <summary>
+        /// Time zone with day light mode
+        /// </summary>
+        public int TimeZoneReal { get; set; }
 
         /// <summary>
         /// Time zone 0-GMT{get;set;}-1=GMT-1{get;set;}1=GMT+1{get;set;}

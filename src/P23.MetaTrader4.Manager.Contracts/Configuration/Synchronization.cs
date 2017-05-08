@@ -53,9 +53,9 @@ namespace P23.MetaTrader4.Manager.Contracts.Configuration
         /// </summary>
         public string Securities { get; set; }
 
-		/// <summary>
-		/// Time correction in minutes
-		/// </summary>
-		public int TimeCorrection { get; set; }
-	}
+        /// <summary>
+        /// Time correction in minutes
+        /// </summary>
+        public int TimeCorrection { get; set; }
+    }
 }
