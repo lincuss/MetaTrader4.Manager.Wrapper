@@ -1255,7 +1255,7 @@ namespace P23 {
 				/// </summary>
 				/// <param name="chart">request parameters</param>
 				/// <param name="timesign">timesign</param>
-				IList<P23::MetaTrader4::Manager::Contracts::RateInfo^>^ ChartRequest(P23::MetaTrader4::Manager::Contracts::ChartInfo^ chart, UInt32 timesign);
+				IList<P23::MetaTrader4::Manager::Contracts::RateInfo^>^ P23::MetaTrader4::Manager::ClrWrapper::ChartRequest(P23::MetaTrader4::Manager::Contracts::ChartInfo^ chart, [System::Runtime::InteropServices::Out]UInt32% timesign);
 
 				/// <summary>
 				/// Add chart data, bars won't be overriden if exist
