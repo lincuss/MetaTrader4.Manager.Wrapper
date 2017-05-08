@@ -177,6 +177,7 @@ Common^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConCommon* configuration)
 	newConfiguration->TimeOfDemo = configuration->timeofdemo;
 	newConfiguration->Timeout = configuration->timeout;
 	newConfiguration->TimeSync = gcnew String(configuration->timesync);
+	newConfiguration->TimeZoneReal = configuration->timezone_real;
 	newConfiguration->TimeZone = configuration->timezone;
 	newConfiguration->TypeOfDemo = (Enums::DemoAccountsType)configuration->typeofdemo;
 
@@ -275,6 +276,7 @@ ConCommon* P23::MetaTrader4::Manager::ClrWrapper::Convert(Common^ configuration)
 		COPY_STR(newConfiguration->timesync, timesync);
 	Marshal::FreeHGlobal(IntPtr(timesync));
 	
+	newConfiguration->timezone_real = configuration->TimeZoneReal;
 	newConfiguration->timezone = configuration->TimeZone;
 	newConfiguration->typeofdemo = (int)configuration->TypeOfDemo;
 
@@ -1133,6 +1135,7 @@ Synchronization^ P23::MetaTrader4::Manager::ClrWrapper::Convert(ConSync* configu
 	newConfiguration->Mode = (Enums::SynchronizationMode)configuration->mode;
 	newConfiguration->Password = gcnew String(configuration->password);
 	newConfiguration->Securities = gcnew String(configuration->securities);
+	newConfiguration->TimeCorrection = configuration->timecorrection;
 	newConfiguration->Server = gcnew String(configuration->server);
 	newConfiguration->To = configuration->to;
 	newConfiguration->UnusedPort = configuration->unusedport;
@@ -1163,6 +1166,8 @@ ConSync* P23::MetaTrader4::Manager::ClrWrapper::Convert(Synchronization^ configu
 	if (securities != NULL)
 		COPY_STR(newConfiguration->securities, securities);
 	Marshal::FreeHGlobal(IntPtr(securities));
+
+	newConfiguration->timecorrection = configuration->TimeCorrection;
 
 	char* server = Convert(configuration->Server);
 	if (server != NULL)
@@ -1856,6 +1861,7 @@ TradeTransInfo* P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4:
 
 	output->tp = input->Tp;
 	output->type = (UCHAR)input->Type;
+	output->flags = (char)input->Flags;
 	output->volume = input->Volume;
 
 	return output;
@@ -1876,6 +1882,7 @@ P23::MetaTrader4::Manager::Contracts::TradeTransInfo^ P23::MetaTrader4::Manager:
 	output->Symbol = gcnew String(input->symbol);
 	output->Tp = input->tp;
 	output->Type = (P23::MetaTrader4::Manager::Contracts::TradeTransactionType)input->type;
+	output->Flags = (P23::MetaTrader4::Manager::Contracts::EnReqFlags)input->flags;
 	output->Volume = input->volume;
 
 	return output;
