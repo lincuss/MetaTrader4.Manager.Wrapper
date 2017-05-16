@@ -1069,6 +1069,13 @@ namespace P23 {
 				P23::MetaTrader4::Manager::Contracts::MarginLevel^ MarginLevelGet(int login, String^ group);
 
 				/// <summary>
+				/// Get margin requirement of account in pumping mode
+				/// </summary>
+				/// <param name="login">login</param>
+				/// <param name="group">user group</param>
+				int MarginLevelGet(int login, String^ group, [System::Runtime::InteropServices::Out]P23::MetaTrader4::Manager::Contracts::MarginLevel^% marginLevel);
+
+				/// <summary>
 				/// Get list of trade requests in pumping mode
 				/// </summary>
 				IList<P23::MetaTrader4::Manager::Contracts::RequestInfo^>^ RequestsGet();
@@ -1233,7 +1240,14 @@ namespace P23 {
 				/// </summary>
 				/// <param name="symbol">symbol</param>
 				/// <param name="updated">updated</param>
-				int HistoryCorrect(String^ symbol, int updated);
+				int HistoryCorrect(String^ symbol);
+
+				/// <summary>
+				/// Correct history
+				/// </summary>
+				/// <param name="symbol">symbol</param>
+				/// <param name="updated">updated</param>
+				int HistoryCorrect(String^ symbol, [System::Runtime::InteropServices::Out] int% updated);
 
 				//--- new chart bases
 				/// <summary>
@@ -1241,7 +1255,7 @@ namespace P23 {
 				/// </summary>
 				/// <param name="chart">request parameters</param>
 				/// <param name="timesign">timesign</param>
-				IList<P23::MetaTrader4::Manager::Contracts::RateInfo^>^ ChartRequest(P23::MetaTrader4::Manager::Contracts::ChartInfo^ chart, UInt32 timesign);
+				IList<P23::MetaTrader4::Manager::Contracts::RateInfo^>^ P23::MetaTrader4::Manager::ClrWrapper::ChartRequest(P23::MetaTrader4::Manager::Contracts::ChartInfo^ chart, [System::Runtime::InteropServices::Out]UInt32% timesign);
 
 				/// <summary>
 				/// Add chart data, bars won't be overriden if exist
