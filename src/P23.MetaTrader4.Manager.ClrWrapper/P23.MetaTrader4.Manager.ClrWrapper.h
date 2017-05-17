@@ -967,7 +967,7 @@ namespace P23 {
 				/// <param name="sizeIn">input data size</param>
 				/// <param name="dataOut">output data</param>
 				/// <param name="sizeOut">output data size</param>
-				int ExternalCommand(String^ dataIn, int sizeIn, String^ dataOut, int sizeOut);
+				int ExternalCommand(String^ dataIn, int sizeIn, String^ %dataOut, int sizeOut);
 				
 				//--- plugins
 				/// <summary>
