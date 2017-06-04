@@ -1628,12 +1628,15 @@ TradeRecord*  P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::M
 	output->commission = input->Commission;
 	output->commission_agent = input->CommissionAgent;
 
-	if (input->ConvRates->Count != CONVERSION_RATES_COUNT) {
-		throw gcnew ArgumentException("Number of ConvRates should be equal to 2", "input.ConvRates");
-	}
+	if (input->ConvRates != nullptr)
+	{
+		if (input->ConvRates->Count != CONVERSION_RATES_COUNT) {
+			throw gcnew ArgumentException("Number of ConvRates should be equal to 2", "input.ConvRates");
+		}
 
-	output->conv_rates[0] = input->ConvRates[0];;
-	output->conv_rates[1] = input->ConvRates[1];;
+		output->conv_rates[0] = input->ConvRates[0];
+		output->conv_rates[1] = input->ConvRates[1];
+	}
 
 	output->digits = input->Digits;
 	output->expiration = input->Expiration;
@@ -1663,12 +1666,15 @@ TradeRecord*  P23::MetaTrader4::Manager::ClrWrapper::Convert(P23::MetaTrader4::M
 	output->tp = input->Tp;
 	output->volume = input->Volume;
 
-	if (input->ApiData->Count != TRADE_RECORD_API_DATA_COUNT) {
-		throw gcnew ArgumentException("Number of ApiData should be equal to 4", "input.ApiData");
-	}
+	if (input->ApiData != nullptr)
+	{
+		if (input->ApiData->Count != TRADE_RECORD_API_DATA_COUNT) {
+			throw gcnew ArgumentException("Number of ApiData should be equal to 4", "input.ApiData");
+		}
 
-	for (int i = 0; i < TRADE_RECORD_API_DATA_COUNT; i++) {
-		output->api_data[i] = input->ApiData[i];
+		for (int i = 0; i < TRADE_RECORD_API_DATA_COUNT; i++) {
+			output->api_data[i] = input->ApiData[i];
+		}
 	}
 
 	return output;
