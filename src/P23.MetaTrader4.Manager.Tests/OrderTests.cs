@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using P23.MetaTrader4.Manager.Contracts;
 using P23.MetaTrader4.Manager.Tests.Helpers;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace P23.MetaTrader4.Manager.Tests
 {
@@ -52,6 +54,56 @@ namespace P23.MetaTrader4.Manager.Tests
                 //Assert
                 Assert.AreEqual(0, result);
                 Assert.IsTrue(tti.Order > 1000);
+            }
+        }
+
+        [TestMethod]
+        public void OpenAndCloseOrder()
+        {
+            var ticketList = new List<int>();
+            var testAccount = int.Parse(ConfigurationManager.AppSettings["testaccount"]);
+            using (var mt = TestHelpers.CreateWrapper())
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    //arrange
+                    var tti = new TradeTransInfo();
+                    tti.Cmd = TradeCommand.Buy;
+                    tti.Type = TradeTransactionType.BrOrderOpen;
+                    tti.Symbol = "EURUSD";
+                    tti.Comment = "unit test";
+                    tti.OrderBy = testAccount;
+                    tti.Price = 1.16033;
+                    tti.Volume = 10;
+
+                    //act
+                    var result = mt.TradeTransaction(tti);
+
+                    //assert
+                    Assert.AreEqual(0, result);
+                    Assert.IsTrue(tti.Order > 0);
+                    ticketList.Add(tti.Order);
+                }
+
+                foreach (var item in ticketList)
+                {
+                    //arrange
+                    var tti = new TradeTransInfo();
+                    tti.Cmd = TradeCommand.Buy;
+                    tti.Type = TradeTransactionType.BrOrderClose;
+                    tti.Symbol = "EURUSD";
+                    tti.Comment = "unit test";
+                    tti.OrderBy = testAccount;
+                    tti.Price = 1.16033;
+                    tti.Volume = 10;
+                    tti.Order = item;
+
+                    //act
+                    var result = mt.TradeTransaction(tti);
+
+                    //assert
+                    Assert.AreEqual(0, result,$"close order {tti.Order} error");
+                }
             }
         }
     }
