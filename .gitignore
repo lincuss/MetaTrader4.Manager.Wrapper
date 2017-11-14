@@ -18,3 +18,5 @@ Release
 *.db
 credentials.config
 [Aa]pp.config
+**/mtmanapi.dll
+**/mtmanapi64.dll

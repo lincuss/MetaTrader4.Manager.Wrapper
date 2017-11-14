@@ -89,12 +89,6 @@
     <Compile Include="UsersTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="mtmanapi.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="mtmanapi64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
