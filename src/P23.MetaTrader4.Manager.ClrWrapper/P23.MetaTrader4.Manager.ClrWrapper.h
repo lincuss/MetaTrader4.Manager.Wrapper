@@ -59,6 +59,7 @@ namespace P23 {
 				PumpingCallbackDelegate^	_callBackDelegate;
 				ExtendedCallBackDelegate^	_extendedPumpingCallBack;
 				void						ExtendedPumpingNotify(int code, int type, void *data, void *param);
+				Object^						_lock = gcnew Object();
 				
 				//Helpers
 				static char* Convert(System::String^ inputString);

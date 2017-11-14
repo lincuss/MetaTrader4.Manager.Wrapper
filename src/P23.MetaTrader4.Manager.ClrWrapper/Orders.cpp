@@ -1,18 +1,27 @@
 #include "stdafx.h"
 
 #include "P23.MetaTrader4.Manager.ClrWrapper.h"
+using namespace System::Threading;
 
 int P23::MetaTrader4::Manager::ClrWrapper::TradeTransaction(P23::MetaTrader4::Manager::Contracts::TradeTransInfo^ info)
 {
-	TradeTransInfo* transaction = Convert(info);
-	int result = _manager->Manager->TradeTransaction(transaction);
-	
-	if (result == 0)
-		info->Order = transaction->order;
+	/*Monitor::Enter(_lock);
+	try
+	{*/
+		TradeTransInfo* transaction = Convert(info);
+		int result = _manager->Manager->TradeTransaction(transaction);
 
-	delete transaction;
+		if (result == 0)
+			info->Order = transaction->order;
 
-	return result;
+		delete transaction;
+
+		return result;
+	/*}
+	finally
+	{
+		Monitor::Exit(_lock)
+	}*/
 }
 
 IList<P23::MetaTrader4::Manager::Contracts::TradeRecord^>^ P23::MetaTrader4::Manager::ClrWrapper::TradesRequest()
